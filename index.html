@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZENITH_SEC | Secure Terminal v2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ─── TOAST NOTIFICATION ─── -->
+    <div id="toast"></div>
+
+    <div class="terminal-container">
+      <!-- ─── HEADER ─── -->
+      <header class="terminal-header">
+        <div class="header-left">
+          <div class="status-dots">
+            <span class="dot red" title="CLOSE"></span>
+            <span class="dot yellow" title="MINIMIZE"></span>
+            <span class="dot green" title="MAXIMIZE"></span>
+          </div>
+          <h1 class="glitch">ZENITH_SEC</h1>
+        </div>
+        <div class="header-right">
+          <span class="version-badge">v2.0</span>
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            onclick="toggleTheme()"
+            title="TOGGLE THEME"
+          >
+            <span class="icon-dark">☀</span>
+            <span class="icon-light">◑</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ─── TABS ─── -->
+      <nav class="tabs">
+        <button
+          class="tab-btn active"
+          onclick="openTab(event, 'encrypt-section')"
+        >
+          ENCRYPT
+        </button>
+        <button class="tab-btn" onclick="openTab(event, 'vault-section')">
+          VAULT
+        </button>
+        <button class="tab-btn" onclick="openTab(event, 'keygen-section')">
+          KEYGEN
+        </button>
+        <button class="tab-btn" onclick="openTab(event, 'about-section')">
+          ABOUT
+        </button>
+      </nav>
+
+      <!-- ═══════════════════════════════════════
+       TAB 1 — ENCRYPT / DECRYPT
+  ════════════════════════════════════════ -->
+      <div id="encrypt-section" class="tab-content active">
+        <!-- Algorithm selector -->
+        <div class="algo-row">
+          <span class="algo-label">> ALGO:</span>
+          <button
+            class="algo-btn active"
+            data-algo="AES"
+            onclick="selectAlgo(this)"
+          >
+            AES-256
+          </button>
+          <button class="algo-btn" data-algo="RC4" onclick="selectAlgo(this)">
+            RC4
+          </button>
+          <button
+            class="algo-btn"
+            data-algo="TripleDES"
+            onclick="selectAlgo(this)"
+          >
+            3DES
+          </button>
+          <button
+            class="algo-btn"
+            data-algo="Rabbit"
+            onclick="selectAlgo(this)"
+          >
+            RABBIT
+          </button>
+        </div>
+
+        <!-- Source data -->
+        <div class="input-group">
+          <label>> SOURCE_DATA:</label>
+          <textarea
+            id="messageInput"
+            placeholder="Enter message or ciphertext..."
+            oninput="updateStats()"
+          ></textarea>
+          <div class="stats-bar">
+            <span>CHARS: <span class="stat-val" id="charCount">0</span></span>
+            <span>BYTES: <span class="stat-val" id="byteCount">0</span></span>
+            <span>LINES: <span class="stat-val" id="lineCount">0</span></span>
+          </div>
+        </div>
+
+        <!-- Access key -->
+        <div class="input-group">
+          <label>> ACCESS_KEY:</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="secretKey"
+              oninput="checkStrength()"
+              placeholder="Enter encryption key..."
+              autocomplete="off"
+            />
+            <button
+              class="toggle-vis"
+              onclick="toggleKeyVisibility()"
+              title="TOGGLE VISIBILITY"
+              id="eyeBtn"
+            >
+              👁
+            </button>
+          </div>
+          <div class="strength-meter">
+            <div id="strengthBar" class="bar"></div>
+          </div>
+          <small id="strengthText">SECURITY: --</small>
+        </div>
+
+        <!-- Encode option -->
+        <div class="checkboxes">
+          <label class="cb-label">
+            <input type="checkbox" id="base64wrap" checked />
+            BASE64_WRAP
+          </label>
+          <label class="cb-label">
+            <input type="checkbox" id="addTimestamp" />
+            TIMESTAMP_EMBED
+          </label>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="actions">
+          <button onclick="process('encrypt')" class="btn enc">
+            ⬡ ENCRYPT
+          </button>
+          <button onclick="process('decrypt')" class="btn dec">
+            ⬢ DECRYPT
+          </button>
+        </div>
+
+        <div class="processing-line" id="procLine"></div>
+
+        <!-- Output -->
+   <div class="output-area">
+  <label>> TERMINAL_OUTPUT:</label>
+
+  <div id="resultBox" class="result-box">
+    <span id="resultText">SYSTEM_READY...</span>
+
+    <button class="copy-btn" id="copyBtn" onclick="copyResult()">
+      COPY
+    </button>
+  </div>
+</div>
+
+        <!-- Hash panel -->
+        <div class="hash-row">
+          <label>> HASH_GENERATOR:</label>
+          <div class="hash-selector">
+            <button
+              class="algo-btn active"
+              data-hash="MD5"
+              onclick="selectHash(this)"
+            >
+              MD5
+            </button>
+            <button
+              class="algo-btn"
+              data-hash="SHA1"
+              onclick="selectHash(this)"
+            >
+              SHA-1
+            </button>
+            <button
+              class="algo-btn"
+              data-hash="SHA256"
+              onclick="selectHash(this)"
+            >
+              SHA-256
+            </button>
+            <button
+              class="algo-btn"
+              data-hash="SHA512"
+              onclick="selectHash(this)"
+            >
+              SHA-512
+            </button>
+            <button
+              class="algo-btn"
+              onclick="computeHash()"
+              style="
+                color: var(--accent-green);
+                border-color: var(--accent-green);
+              "
+            >
+              RUN
+            </button>
+          </div>
+          <div class="hash-out" id="hashOut">HASH_OUTPUT_READY...</div>
+        </div>
+      </div>
+      <!-- /encrypt-section -->
+
+      <!-- ═══════════════════════════════════════
+       TAB 2 — SESSION VAULT
+  ════════════════════════════════════════ -->
+      <div id="vault-section" class="tab-content">
+        <div class="vault-header">
+          <h3>> SESSION_LOGS:</h3>
+          <span class="vault-count" id="vaultCount">0 ENTRIES</span>
+        </div>
+        <ul id="historyList">
+          <li class="empty-msg">BUFFER_EMPTY...</li>
+        </ul>
+        <div class="vault-actions">
+          <button onclick="exportLogs()" class="btn-export">EXPORT_LOGS</button>
+          <button onclick="clearHistory()" class="btn-clear">PURGE_LOGS</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       TAB 3 — KEY GENERATOR
+  ════════════════════════════════════════ -->
+      <div id="keygen-section" class="tab-content keygen-section">
+        <div class="vault-header">
+          <h3>> KEY_GENERATOR:</h3>
+        </div>
+
+        <div class="keygen-option">
+          <label>KEY LENGTH (bits)</label>
+          <div style="display: flex; align-items: center; gap: 8px">
+            <input
+              type="range"
+              id="keyLength"
+              min="64"
+              max="512"
+              step="64"
+              value="256"
+              oninput="updateKeyLen()"
+            />
+            <span class="range-val" id="keyLenVal">256</span>
+          </div>
+        </div>
+
+        <div class="checkboxes mt8">
+          <label class="cb-label"
+            ><input type="checkbox" id="useUpper" checked /> UPPERCASE</label
+          >
+          <label class="cb-label"
+            ><input type="checkbox" id="useLower" checked /> LOWERCASE</label
+          >
+          <label class="cb-label"
+            ><input type="checkbox" id="useNum" checked /> NUMBERS</label
+          >
+          <label class="cb-label"
+            ><input type="checkbox" id="useSpec" checked /> SYMBOLS</label
+          >
+        </div>
+
+        <label style="font-size: 11px; color: var(--text-label)"
+          >> GENERATED_KEY:</label
+        >
+        <div class="generated-key" id="genKeyOut">GENERATE_A_KEY_BELOW...</div>
+
+        <div class="keygen-actions mt8">
+          <button onclick="generateKey()" class="btn enc" style="flex: 2">
+            ⚡ GENERATE
+          </button>
+          <button
+            onclick="copyGenKey()"
+            class="copy-btn"
+            style="position: static; padding: 9px 12px; flex: 1"
+          >
+            COPY
+          </button>
+        </div>
+
+        <hr class="divider" />
+
+        <div style="font-size: 11px; color: var(--text-label)">
+          <div>> ENTROPY_INFO:</div>
+          <div
+            id="entropyInfo"
+            style="
+              color: var(--text-dim);
+              margin-top: 6px;
+              font-size: 10px;
+              line-height: 1.8;
+            "
+          >
+            SELECT OPTIONS AND GENERATE TO VIEW ENTROPY STATS.
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       TAB 4 — ABOUT
+  ════════════════════════════════════════ -->
+      <div id="about-section" class="tab-content about-section">
+        <div class="about-title">ZENITH_SEC :: SECURE TERMINAL v2.0</div>
+        <div
+          style="font-size: 10px; color: var(--text-dim); margin-bottom: 12px"
+        >
+          A client-side encryption workstation. Zero server contact. Zero data
+          leakage.
+        </div>
+
+        <div class="feature-item">
+          <span class="fi-icon">✓</span>
+          <div>
+            <div class="fi-label">MULTI-ALGORITHM SUPPORT</div>
+            <div class="fi-desc">
+              AES-256 / RC4 / Triple-DES / Rabbit cipher engines
+            </div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">✓</span>
+          <div>
+            <div class="fi-label">HASH GENERATOR</div>
+            <div class="fi-desc">
+              MD5, SHA-1, SHA-256, SHA-512 one-way hash functions
+            </div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">✓</span>
+          <div>
+            <div class="fi-label">SECURE KEY GENERATOR</div>
+            <div class="fi-desc">
+              Cryptographically random keys, configurable charset + length
+            </div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">✓</span>
+          <div>
+            <div class="fi-label">SESSION VAULT</div>
+            <div class="fi-desc">
+              In-memory encrypted operation log with export to JSON
+            </div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">✓</span>
+          <div>
+            <div class="fi-label">DARK / LIGHT MODE</div>
+            <div class="fi-desc">
+              Full theme engine with smooth transition and persistence
+            </div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">✓</span>
+          <div>
+            <div class="fi-label">PASSWORD STRENGTH METER</div>
+            <div class="fi-desc">
+              Real-time entropy analysis with visual feedback
+            </div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="fi-icon">✓</span>
+          <div>
+            <div class="fi-label">100% CLIENT-SIDE</div>
+            <div class="fi-desc">
+              No network requests. All operations run in your browser.
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            margin-top: 14px;
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.8;
+          "
+        >
+          LIBRARY: CryptoJS 4.1.1 (BSD-2)<br />
+          FONT: Orbitron + Share Tech Mono<br />
+          ENGINE: CryptoJS AES via PBKDF2<br />
+        </div>
+      </div>
+
+      <!-- ─── FOOTER ─── -->
+      <footer class="terminal-footer">
+        <p>
+          STATUS: <span class="online">CONNECTED</span> |
+          <span class="algo-status" id="footerAlgo">AES-256</span>
+        </p>
+        <span class="footer-clock" id="footerClock">--:--:--</span>
+      </footer>
+    </div>
+    <!-- /terminal-container -->
+
+    <!-- ─── CryptoJS ─── -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
