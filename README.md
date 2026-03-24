@@ -1,112 +1,58 @@
-# 🛡️ ZENITH_SEC | Secure Encryption Terminal v2.0
+# ZENITH_SEC — Secure Terminal v2.0
 
-![ZENITH_SEC demo](assets/demo.png)  
+![Demo](assets/demo.png)
 
-> All UI elements are designed to mimic a professional terminal environment with interactive output and copy-to-clipboard functionality.
+> Client-side encryption workstation. Zero server contact.
 
-
-**ZENITH_SEC** is a modern, hacker-style, web-based encryption terminal built with **HTML, CSS, and JavaScript**, designed for **secure message encryption and decryption** directly in the browser.  
-
-It combines **cyberpunk-inspired aesthetics**, **client-side cryptography**, and a **terminal-like interactive experience** for developers, students, and tech enthusiasts.
-
----
-
-## 🚀 Key Features
-
-- 🔐 **AES-256 / RC4 / TripleDES / Rabbit Encryption & Decryption**  
-- 🖥️ **Terminal-style User Interface** with responsive design  
-- 🔑 **Real-time Password Strength Indicator**  
-- 📜 **Session Vault** for storing encrypted activity logs  
-- 🎨 **Mobile-Friendly & Responsive Layout**  
-- ⚡ **Fast Client-Side Processing** — no backend required  
-- 🌗 **Dark / Light Theme Toggle**  
-- 🧮 **Hash Generator** (MD5, SHA-1, SHA-256, SHA-512)  
-- 🔑 **Secure Key Generator** with configurable length and charset  
-
----
-
-## 🧠 How It Works
-
-
-### Encryption
-1. Enter a message and a secret key.
-2. Encrypt using AES-256 (or other selected algorithms).  
-3. Encrypted text appears in the terminal output and can be copied.
-
-### Decryption
-1. Paste encrypted text in the terminal.  
-2. Enter the correct key.  
-3. Original message is decrypted and displayed instantly.
-
-> All operations occur **locally in the browser** — **no data is sent to a server**.
-
----
-
-## 🛠️ Technologies Used
-
-- **HTML5** – Semantic structure and layout  
-- **CSS3** – Cyberpunk-style terminal UI, responsive design  
-- **JavaScript (Vanilla)** – Encryption, decryption, UI interactions  
-- **CryptoJS** – AES, RC4, 3DES, Rabbit encryption algorithms  
-
----
-
-## 📂 Project Structure
-
+## 📁 Structure
 
 ```
-
-ZENITH_SEC/
-│
-├── index.html # Main application structure
-├── style.css # Terminal UI styling
-├── script.js # Encryption logic & functionality
-├── assets/ # Screenshots / logos 
-└── README.md # Project documentation
-
+zenith_sec/
+├── index.html
+├── style.css
+├── script.js
+└── assets/
+    └── demo.png
 ```
 
----
+## ❗ Problem
 
-## 🔒 Security Notice
+Modern teams rely heavily on cloud platforms to store and share sensitive data.
 
-- **Client-Side Encryption Only** — suitable for demonstration and educational purposes.  
-- Does **not replace enterprise-grade encryption solutions**.  
-- Keys and messages remain in the browser memory; no server communication.
+This introduces critical risks:
+- Data breaches and leaks
+- Third-party access and surveillance
+- Lack of control over data lifecycle
 
----
+## 💡 Solution
 
-## 🎯 Use Cases
+ZENITH_SEC eliminates these risks by providing a fully offline, client-side secure workspace where:
 
-- Secure message exchange (personal or educational)  
-- Cryptography learning and experimentation  
-- Hackathon and portfolio showcase  
-- Demonstrating UI/UX for cybersecurity tools  
+- Data is encrypted before it exists
+- No server is ever involved
+- Users retain complete ownership and control
 
----
+## ✨ Features
 
-## 📦 Installation & Usage
+- 🔐 AES-256 / RC4 / 3DES / Rabbit encryption
+- 🔑 Key generator with entropy stats
+- 📊 Algorithm benchmark
+- 📡 Morse / Binary / Hex / ROT13 / Base64 converter
+- 📷 QR code generator & 💣 Self-destruct messages
+- 🔢 Hash generator (MD5, SHA-1, SHA-256, SHA-512)
+- 🎨 6 themes — Cyber, Hacker, Blood, Purple, Ocean, Ghost
+- 👤 Local-only login/register system
+- 📱 Fully responsive
 
-1. Clone the repository:
+## 🚀 Usage
 
 ```bash
-
-git clone https://github.com/your-username/zenith-sec.git
-
+open index.html
+# or
+python -m http.server 8080
 ```
 
-2. Open `index.html` in your browser.
+## 🛠️ Libraries
 
-No server setup required.
-
----
-
-## 👨‍💻 Author
-
-Developed by [Moamen El-Sayed Abouhaty]
-
----
-
-## 📜 License
-
-This project is open-source and available under the MIT License.
+- CryptoJS 4.1.1 — Encryption & hashing
+- QRCode.js 1.0.0 — QR generation
